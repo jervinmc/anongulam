@@ -7,16 +7,16 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
-import 'package:awesome_dialog/awesome_dialog.dart';
 
-class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+
+class Recommend extends StatefulWidget {
+  const Recommend({Key? key}) : super(key: key);
 
   @override
-  _HomeState createState() => _HomeState();
+  _RecommendState createState() => _RecommendState();
 }
 
-class _HomeState extends State<Home> {
+class _RecommendState extends State<Recommend> {
   final List<String> imgList = [
   'https://anongulam.s3.amazonaws.com/pic1.jpeg',
   'https://anongulam.s3.amazonaws.com/pic10.jpeg',
@@ -29,15 +29,10 @@ class _HomeState extends State<Home> {
     List data_breakfast = [];
     List data_lunch = [];
     List data_dinner = [];
-    List data_recommend = [];
    static String BASE_URL = '' + Global.url + '/menu_list';
-   static String BASE_URL1 = '' + Global.url + '/recommend';
-   
   Future<String> getData() async {
-    _load = true;
     final prefs = await SharedPreferences.getInstance();
     var category = prefs.getString("category");
-    var _id = prefs.getInt("_id");
     final response = await http.get(
         Uri.parse(BASE_URL + '/' + 'breakfast' + '/' + '${category}'),
         headers: {"Content-Type": "application/json"});
@@ -47,16 +42,12 @@ class _HomeState extends State<Home> {
         final response_dinner = await http.get(
         Uri.parse(BASE_URL + '/' + 'dinner' + '/' + '${category}'),
         headers: {"Content-Type": "application/json"});
-        final response_recommend = await http.get(
-        Uri.parse(BASE_URL1 +  '/' +_id.toString()),
-        headers: {"Content-Type": "application/json"});
         setState(() {
             try {
               _load = false;
               data_breakfast = json.decode(response.body);
               data_lunch = json.decode(response_lunch.body);
               data_dinner = json.decode(response_dinner.body);
-              data_recommend = json.decode(response_recommend.body);
               imgList[0] = data_dinner[0][2];
               imgList[1] = data_dinner[1][2];
               imgList[2] = data_dinner[2][2];
@@ -102,32 +93,12 @@ class _HomeState extends State<Home> {
               },
             ),
             ListTile(
-              title: Text('Groceries'),
+              title: Text('Item 2'),
               onTap: () {
-                Get.toNamed('/groceries');
                 // Update the state of the app
                 // ...
                 // Then close the drawer
-                // Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: Text('Logout'),
-              onTap: () {
-              
-                 AwesomeDialog(
-                context: context,
-                dialogType: DialogType.QUESTION,
-                animType: AnimType.BOTTOMSLIDE,
-                title: "Are you sure you want to logout?",
-                desc: "",
-                btnOkOnPress: () {
-                  Get.toNamed('/home');
-                },
-                btnCancelOnPress: (){
-
-                }
-              )..show();
+                Navigator.pop(context);
               },
             ),
           ],
@@ -144,13 +115,11 @@ class _HomeState extends State<Home> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Good Morning!',
+                Text('Weekly Meals',
                     style:
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0)),
-                // Container(
-                //     child: Text('8:00AM'),
-                //     padding: EdgeInsets.only(top: 12, bottom: 10)),
                 Container(
+                  padding: EdgeInsets.only(top: 15),
                     child: CarouselSlider(
                   options: CarouselOptions(),
                   items: imgList
@@ -167,93 +136,10 @@ class _HomeState extends State<Home> {
           Container(
             padding: EdgeInsets.all(10),
             child: Text(
-              "Recommended Items",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
-            ),
-          ),
-          _load
-                ? Container(
-                    color: Colors.white10,
-                    width: 70.0,
-                    height: 70.0,
-                    child: new Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: new Center(
-                            child: const CircularProgressIndicator())),
-                  )
-                : Text(''),
-          Container(
-            height: 200,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: data_recommend.length,
-              itemBuilder: (BuildContext context, index){
-                return Column(
-                  children: [
-                    InkWell(
-                      child: Card(
-                        elevation: 4,
-                        // color: Color(0xffc6782b),
-                        shape: RoundedRectangleBorder(
-                          side: BorderSide(color: Colors.white70, width: 1),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        margin: EdgeInsets.all(20.0),
-                        child: Container(
-                          // width: 150,
-                          // height: 185,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Image.network(data_recommend[index][2].toString(),fit: BoxFit.cover,height:100,width: 100,),
-                              
-                              Padding(padding: EdgeInsets.only(bottom: 15))
-                            ],
-                          ),
-                        )),
-                        onTap: (){
-                          Get.toNamed('/details',arguments:['${data_recommend[index][2]}','${data_recommend[index][0]}']);
-                        },
-                    ),
-                    Column(
-                      children: [
-                        Text(data_recommend[index][1],
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15.0)),
-                              Text("",
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                  )),
-                      ],
-                    ),
-                        
-                    
-                  ],
-                );
-            })
-          ),
-          Container(
-            padding: EdgeInsets.all(10),
-            child: Text(
               "Alternative Breakfasts",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
             ),
           ),
-          _load
-                ? Container(
-                    color: Colors.white10,
-                    width: 70.0,
-                    height: 70.0,
-                    child: new Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: new Center(
-                            child: const CircularProgressIndicator())),
-                  )
-                : Text(''),
           Container(
             height: 200,
             child: ListView.builder(
@@ -310,7 +196,7 @@ class _HomeState extends State<Home> {
           ),
               Container(
                 padding: EdgeInsets.all(10),
-                child:  Text("Weekley Meals",
+                child:  Text("Explore",
                     style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -326,11 +212,7 @@ class _HomeState extends State<Home> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     margin: EdgeInsets.all(20.0),
-                    child: InkWell(
-                      onTap: (){
-                        Get.toNamed('/recommended');
-                      },
-                      child:Container(
+                    child: Container(
                       width: 150,
                       child: Row(children: [
                         Image.network(imgList[0]),
@@ -338,13 +220,12 @@ class _HomeState extends State<Home> {
                           padding: EdgeInsets.all(10),
                           child:Column(
                           children: [
-                            Text("For a diet meal to provide satisfactory."),
-                            Text("A whole week meal.")
+                            Text("Lorem ipsum test test lorem "),
+                            Text("Lorem ipsum test test lorem ")
                           ],
                         )
                         )
                       ],),
-                    )
                     )),
                 ),
                 Container(

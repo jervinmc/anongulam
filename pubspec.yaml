@@ -50,6 +50,8 @@ dev_dependencies:
   shared_preferences: any
   get: ^4.3.8
   carousel_slider: ^4.0.0
+  image_picker: ^0.8.4+9
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

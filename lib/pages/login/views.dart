@@ -58,6 +58,19 @@ class _LoginState extends State<Login> {
         prefs.setInt("_id",_data['id']);
         prefs.setString("_email",_data['email']);
         prefs.setBool("isLoggedIn", true);
+        if(_data['isketo']=='yes'){
+          print("nice");
+          prefs.setString("category", 'keto');
+        }
+        else if(_data['isvegetarian']=='yes'){
+          prefs.setString("category", 'vegetarian');
+        }
+        else if(_data['ispaleo']=='yes'){
+          prefs.setString('category', 'paleo');
+        }
+        else if(_data['ispescatarian']=='yes'){
+          prefs.setString('category', 'pescatarian');
+        }
         var res=  jsonDecode(jsonsDataString);
         print(res['status']);
         setState(() {
