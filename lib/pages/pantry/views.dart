@@ -6,6 +6,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
+
+
 class Pantry extends StatefulWidget {
   const Pantry({Key? key}) : super(key: key);
 
@@ -20,6 +22,9 @@ class _PantryState extends State<Pantry> {
   bool _load = false;
 
   Future<String> getData() async {
+    setState(() {
+      _load=true;
+    });
     final prefs = await SharedPreferences.getInstance();
     var _id = prefs.getInt("_id");
     final response = await http.get(Uri.parse(BASE_URL + '/' + _id.toString()),
@@ -35,7 +40,7 @@ class _PantryState extends State<Pantry> {
     });
     return "";
   }
-
+ 
   @override
   void initState() {
     // TODO: implement initState
@@ -49,7 +54,22 @@ class _PantryState extends State<Pantry> {
         title: Text('Pantry'),
         backgroundColor: Color(0xffc6782b),
       ),
-      body: Container(
+      body: _load
+                ? Container(
+                    color: Colors.white10,
+                    width: 70.0,
+                    height: 70.0,
+                    child: Column(
+                      mainAxisAlignment:MainAxisAlignment.center,
+                      children: [
+                        new Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: new Center(
+                            child: const CircularProgressIndicator()))
+                      ],
+                    ),
+                  )
+                : Container(
         child: new ListView.separated(
               itemCount: data == null ? 0 : data.length,
               itemBuilder: (BuildContext context, int index) {

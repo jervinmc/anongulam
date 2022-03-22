@@ -28,6 +28,7 @@ class _HomeState extends State<Home> {
   bool _load =false;
     List data_breakfast = [];
     List data_lunch = [];
+   String category_data = "";
     List data_dinner = [];
     List data_recommend = [];
    static String BASE_URL = '' + Global.url + '/menu_list';
@@ -37,15 +38,17 @@ class _HomeState extends State<Home> {
     _load = true;
     final prefs = await SharedPreferences.getInstance();
     var category = prefs.getString("category");
+    var _allergy = prefs.getString("_allergy");
+    category_data = category!;
     var _id = prefs.getInt("_id");
     final response = await http.get(
-        Uri.parse(BASE_URL + '/' + 'breakfast' + '/' + '${category}'),
+        Uri.parse(BASE_URL + '/' + 'breakfast' + '/' + '${category}' +'/'+'${_allergy}'),
         headers: {"Content-Type": "application/json"});
         final response_lunch = await http.get(
-        Uri.parse(BASE_URL + '/' + 'lunch' + '/' + '${category}'),
+        Uri.parse(BASE_URL + '/' + 'lunch' + '/' + '${category}'+'/'+'${_allergy}'),
         headers: {"Content-Type": "application/json"});
         final response_dinner = await http.get(
-        Uri.parse(BASE_URL + '/' + 'dinner' + '/' + '${category}'),
+        Uri.parse(BASE_URL + '/' + 'dinner' + '/' + '${category}'+'/'+'${_allergy}'),
         headers: {"Content-Type": "application/json"});
         final response_recommend = await http.get(
         Uri.parse(BASE_URL1 +  '/' +_id.toString()),
@@ -92,6 +95,16 @@ class _HomeState extends State<Home> {
               ),
             ),
             ListTile(
+              title: Text('Profile'),
+              onTap: () {
+                Get.toNamed('/profile');
+                // Update the state of the app
+                // ...
+                // Then close the drawer
+                // Navigator.pop(context);
+              },
+            ),
+            ListTile(
               title: Text('Pantry'),
               onTap: () {
                 Get.toNamed('/pantry');
@@ -122,7 +135,7 @@ class _HomeState extends State<Home> {
                 title: "Are you sure you want to logout?",
                 desc: "",
                 btnOkOnPress: () {
-                  Get.toNamed('/home');
+                  Get.toNamed('/login');
                 },
                 btnCancelOnPress: (){
 
@@ -144,9 +157,7 @@ class _HomeState extends State<Home> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Good Morning!',
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0)),
+              
                 // Container(
                 //     child: Text('8:00AM'),
                 //     padding: EdgeInsets.only(top: 12, bottom: 10)),
@@ -310,7 +321,7 @@ class _HomeState extends State<Home> {
           ),
               Container(
                 padding: EdgeInsets.all(10),
-                child:  Text("Weekley Meals",
+                child:  Text("Weekly Meals",
                     style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -350,7 +361,7 @@ class _HomeState extends State<Home> {
                 Container(
             padding: EdgeInsets.all(10),
             child: Text(
-              "Keto Breakfasts",
+              "${category_data=='keto' ? 'keto' : category_data=='paleo' ? 'Paleo' : 'Vegetarian'} Breakfasts",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
             ),
           ),
@@ -385,7 +396,7 @@ class _HomeState extends State<Home> {
                           ),
                         )),
                         onTap: (){
-                          Get.toNamed('/details');
+                           Get.toNamed('/details',arguments:['${data_breakfast[index][2]}','${data_breakfast[index][0]}']);
                         },
                     ),
                     Column(
@@ -409,7 +420,7 @@ class _HomeState extends State<Home> {
           Container(
             padding: EdgeInsets.all(10),
             child: Text(
-              "Keto Lunch",
+              "${category_data=='keto' ? 'keto' : category_data=='paleo' ? 'Paleo' : 'Vegetarian'} Lunch",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
             ),
           ),
@@ -444,7 +455,7 @@ class _HomeState extends State<Home> {
                           ),
                         )),
                         onTap: (){
-                          Get.toNamed('/details');
+                          Get.toNamed('/details',arguments:['${data_lunch[index][2]}','${data_lunch[index][0]}']);
                         },
                     ),
                     Column(
@@ -468,7 +479,7 @@ class _HomeState extends State<Home> {
           Container(
             padding: EdgeInsets.all(10),
             child: Text(
-              "Keto Dinner",
+              "${category_data=='keto' ? 'keto' : category_data=='paleo' ? 'Paleo' : 'Vegetarian'} Dinner",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
             ),
           ),
@@ -503,7 +514,7 @@ class _HomeState extends State<Home> {
                           ),
                         )),
                         onTap: (){
-                          Get.toNamed('/details');
+                         Get.toNamed('/details',arguments:['${data_dinner[index][2]}','${data_dinner[index][0]}']);
                         },
                     ),
                     Column(

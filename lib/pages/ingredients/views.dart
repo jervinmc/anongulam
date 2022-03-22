@@ -66,7 +66,7 @@ class _IngredientsState extends State<Ingredients> {
                     // Get.toNamed('/productdetails',arguments:[data[index]['product_name'],data[index]['quantity'],data[index]['price'],data[index]['id']]);
                   },
                   title: Text(data[index][2].toString()),
-                  // trailing: Text("${data[index][2]}"),
+                  trailing: Text("${data[index][3]}"),
                 );
               },separatorBuilder: (context, index) {
                   return Divider();

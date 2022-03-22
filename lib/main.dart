@@ -8,7 +8,9 @@ import 'package:anongulam/pages/ingredients/views.dart';
 import 'package:anongulam/pages/login/views.dart';
 import 'package:anongulam/pages/menu/views.dart';
 import 'package:anongulam/pages/pantry/views.dart';
+import 'package:anongulam/pages/profile/views.dart';
 import 'package:anongulam/pages/recommended/views.dart';
+import 'package:anongulam/pages/reset_password/views.dart';
 import 'package:anongulam/pages/signup/views.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -33,7 +35,9 @@ class MyApp extends StatelessWidget {
         GetPage(name: "/addpantry", page:()=>AddPantry()),
         GetPage(name: "/recommended", page:()=>Recommend()),
         GetPage(name: "/groceries", page:()=>Groceries()),
-        GetPage(name: "/ingredients", page:()=>Ingredients())
+        GetPage(name: "/ingredients", page:()=>Ingredients()),
+         GetPage(name: "/profile", page:()=>Profile()),
+        GetPage(name: "/reset", page:()=>ResetPassword())
         // GetPage(name: "/starting", page:()=>Starting()),
         // GetPage(name: "/menu", page:()=>VegetableList()),
         // GetPage(name: "/tutorial", page:()=>Tutorial()),

@@ -51,6 +51,10 @@ dev_dependencies:
   get: ^4.3.8
   carousel_slider: ^4.0.0
   image_picker: ^0.8.4+9
+  path_provider: ^2.0.9
+  meta: ^1.7.0
+  tflite: ^1.1.2
+
 
 
 # For information on the generic Dart part of this file, see the
@@ -68,6 +72,8 @@ flutter:
   assets:
     - assets/logo.jpeg
     - assets/logo.jpeg
+    - assets/labels.txt
+    - assets/model_unquant.tflite
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
