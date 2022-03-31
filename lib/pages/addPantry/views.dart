@@ -51,7 +51,7 @@ bool hasImage = false;
     final response = await http.post(Uri.parse(BASE_URL + '/' + '1'),
         headers: {"Content-Type": "application/json"},
         body: json.encode(params));
-    final data = json.decode(response.body);
+    final data = json.decode(response.body); 
      AwesomeDialog(
       context: context,
       dialogType: DialogType.SUCCES,

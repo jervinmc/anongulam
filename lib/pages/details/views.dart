@@ -77,6 +77,7 @@ void addLike() async {
                   child: Image.network(args[0], fit: BoxFit.cover)),
                   Positioned(child: IconButton(icon: Icon(Icons.favorite,size: 30,color: Colors.red,),onPressed: (){
                     addLike();
+                     Get.toNamed('/home');
                   },),top:10,right: 10,
                   )
               ],),

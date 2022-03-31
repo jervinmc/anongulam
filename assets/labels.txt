@@ -1,2 +1,9 @@
-0 Ampalaya
-1 Okra
+ampalaya
+garlic
+bangus
+cooking oil
+vinegar
+tomato
+tilapia
+spring onion
+sayote

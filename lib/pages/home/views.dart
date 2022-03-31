@@ -21,9 +21,6 @@ class _HomeState extends State<Home> {
   'https://anongulam.s3.amazonaws.com/pic1.jpeg',
   'https://anongulam.s3.amazonaws.com/pic10.jpeg',
   'https://anongulam.s3.amazonaws.com/pic11.png',
-  'https://anongulam.s3.amazonaws.com/pic12.png',
-  'https://anongulam.s3.amazonaws.com/pic14.jpeg',
-  'https://anongulam.s3.amazonaws.com/pic19.png'
 ];
   bool _load =false;
     List data_breakfast = [];
@@ -33,13 +30,21 @@ class _HomeState extends State<Home> {
     List data_recommend = [];
    static String BASE_URL = '' + Global.url + '/menu_list';
    static String BASE_URL1 = '' + Global.url + '/recommend';
-   
+   List feature = [];
   Future<String> getData() async {
+       DateTime now = new DateTime.now();
+    DateTime date = new DateTime(now.year, now.month, now.day);
+    print("okayyyyyyyy");
+    print(now.hour);
     _load = true;
     final prefs = await SharedPreferences.getInstance();
     var category = prefs.getString("category");
     var _allergy = prefs.getString("_allergy");
+    setState(() {
+      
+    });
     category_data = category!;
+    
     var _id = prefs.getInt("_id");
     final response = await http.get(
         Uri.parse(BASE_URL + '/' + 'breakfast' + '/' + '${category}' +'/'+'${_allergy}'),
@@ -51,7 +56,7 @@ class _HomeState extends State<Home> {
         Uri.parse(BASE_URL + '/' + 'dinner' + '/' + '${category}'+'/'+'${_allergy}'),
         headers: {"Content-Type": "application/json"});
         final response_recommend = await http.get(
-        Uri.parse(BASE_URL1 +  '/' +_id.toString()),
+        Uri.parse(BASE_URL1 +  '/' +_id.toString() +'/'+category),
         headers: {"Content-Type": "application/json"});
         setState(() {
             try {
@@ -60,11 +65,25 @@ class _HomeState extends State<Home> {
               data_lunch = json.decode(response_lunch.body);
               data_dinner = json.decode(response_dinner.body);
               data_recommend = json.decode(response_recommend.body);
-              imgList[0] = data_dinner[0][2];
-              imgList[1] = data_dinner[1][2];
-              imgList[2] = data_dinner[2][2];
-              imgList[3] = data_breakfast[0][2];
-              imgList[4] = data_breakfast[1][2];
+              if(now.hour>6 && now.hour<11){
+                  feature = data_breakfast[0];
+                  // imgList[0] = data_breakfast[2][2];
+                  imgList[0] = data_breakfast[0][2];
+                  // imgList[1] = data_breakfast[1][2];
+              }
+              else if(now.hour>11 && now.hour<15){
+                  feature = data_lunch[0];
+                  imgList[0] = data_lunch[0][2];
+                  // imgList[1] = data_lunch[0][2];
+                  // imgList[2] = data_lunch[1][2];
+              }
+              else{
+                  feature = data_dinner[0];
+                  imgList[0] = data_dinner[0][2];
+                  // imgList[1] = data_dinner[0][2];
+                  // imgList[2] = data_dinner[1][2];
+              }
+          
             } finally {
               _load = false;
             }
@@ -73,6 +92,7 @@ class _HomeState extends State<Home> {
   }
   @override
   void initState() {
+ 
     // TODO: implement initState
     super.initState();
     getData();
@@ -135,6 +155,7 @@ class _HomeState extends State<Home> {
                 title: "Are you sure you want to logout?",
                 desc: "",
                 btnOkOnPress: () {
+                  Navigator.pop(context);
                   Get.toNamed('/login');
                 },
                 btnCancelOnPress: (){
@@ -161,17 +182,28 @@ class _HomeState extends State<Home> {
                 // Container(
                 //     child: Text('8:00AM'),
                 //     padding: EdgeInsets.only(top: 12, bottom: 10)),
-                Container(
-                    child: CarouselSlider(
-                  options: CarouselOptions(),
-                  items: imgList
-                      .map((item) => Container(
-                            child: Center(
-                                child: Image.network(item,
-                                    fit: BoxFit.cover, width: 1000)),
-                          ))
-                      .toList(),
-                )),
+                // Container(
+                //     child: CarouselSlider(
+                //   options: CarouselOptions(),
+                //   items: imgList
+                //       .map((item) => Container(
+                //             child: Center(
+                //                 child: Image.network(item,
+                //                     fit: BoxFit.cover, width: 1000)),
+                //           ))
+                //       .toList(),
+                // )),
+                feature.length==0 ? Text('Loading...') :
+                InkWell(
+                  child:Container(
+                  child:Image.network("${feature[2]}"),
+                )
+                ,
+                onTap:() => {
+                    Get.toNamed('/details',arguments:['${feature[2]}','${feature[0]}'])
+                }
+                )
+              
               ],
             ),
           ),
@@ -361,7 +393,7 @@ class _HomeState extends State<Home> {
                 Container(
             padding: EdgeInsets.all(10),
             child: Text(
-              "${category_data=='keto' ? 'keto' : category_data=='paleo' ? 'Paleo' : 'Vegetarian'} Breakfasts",
+              "${category_data=='keto' ? 'keto' : category_data=='paleo' ? 'Paleo' : category_data=='pescatarian' ? 'Pescatarian' : 'Vegetarian'} Breakfasts",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
             ),
           ),
@@ -420,7 +452,7 @@ class _HomeState extends State<Home> {
           Container(
             padding: EdgeInsets.all(10),
             child: Text(
-              "${category_data=='keto' ? 'keto' : category_data=='paleo' ? 'Paleo' : 'Vegetarian'} Lunch",
+             "${category_data=='keto' ? 'keto' : category_data=='paleo' ? 'Paleo' : category_data=='pescatarian' ? 'Pescatarian' : 'Vegetarian'} Lunch",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
             ),
           ),
@@ -479,7 +511,7 @@ class _HomeState extends State<Home> {
           Container(
             padding: EdgeInsets.all(10),
             child: Text(
-              "${category_data=='keto' ? 'keto' : category_data=='paleo' ? 'Paleo' : 'Vegetarian'} Dinner",
+              "${category_data=='keto' ? 'keto' : category_data=='paleo' ? 'Paleo' : category_data=='pescatarian' ? 'Pescatarian' : 'Vegetarian'} Dinner",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
             ),
           ),

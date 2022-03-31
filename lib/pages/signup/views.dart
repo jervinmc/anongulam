@@ -25,7 +25,7 @@ class _SignupState extends State<Signup> {
   String ispaleo = 'no';
   String ispescatarian = 'no';
   String heath_condition = '';
-  String allergy = '';
+  String allergy = 'None';
 
   void notify(DialogType type, title, desc) {
     AwesomeDialog(
@@ -181,6 +181,7 @@ class _SignupState extends State<Signup> {
                                 onPressed: () {
                                   setState(() {
                                     isketo = 'yes';
+                                    _surveyIndex = 3;
                                   });
                                 },
                               ),
@@ -204,6 +205,7 @@ class _SignupState extends State<Signup> {
                                 onPressed: () {
                                   setState(() {
                                     isvegetarian = 'yes';
+                                    _surveyIndex = 3;
                                   });
                                 },
                               ),
@@ -227,6 +229,7 @@ class _SignupState extends State<Signup> {
                                 onPressed: () {
                                   setState(() {
                                     ispaleo = 'yes';
+                                    _surveyIndex = 3;
                                   });
                                 },
                               ),
@@ -250,35 +253,36 @@ class _SignupState extends State<Signup> {
                                 onPressed: () {
                                   setState(() {
                                     ispescatarian = 'yes';
-                                  });
-                                },
-                              ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.only(top: 5),
-                              width: 250,
-                              child: ElevatedButton(
-                                child: Text(
-                                  "Proceed",
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                                onPressed: () {
-                                  setState(() {
                                     _surveyIndex = 3;
                                   });
                                 },
-                                style: ElevatedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(18.0),
-                                    ),
-                                    primary: Colors.white,
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 25, vertical: 10),
-                                    textStyle: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold)),
                               ),
                             ),
+                            // Container(
+                            //   padding: EdgeInsets.only(top: 5),
+                            //   width: 250,
+                            //   child: ElevatedButton(
+                            //     child: Text(
+                            //       "Proceed",
+                            //       style: TextStyle(color: Colors.black),
+                            //     ),
+                            //     onPressed: () {
+                            //       setState(() {
+                            //         _surveyIndex = 3;
+                            //       });
+                            //     },
+                            //     style: ElevatedButton.styleFrom(
+                            //         shape: RoundedRectangleBorder(
+                            //           borderRadius: BorderRadius.circular(18.0),
+                            //         ),
+                            //         primary: Colors.white,
+                            //         padding: EdgeInsets.symmetric(
+                            //             horizontal: 25, vertical: 10),
+                            //         textStyle: TextStyle(
+                            //             fontSize: 15,
+                            //             fontWeight: FontWeight.bold)),
+                            //   ),
+                            // ),
                           ],
                         ),
                       )
@@ -372,8 +376,9 @@ class _SignupState extends State<Signup> {
                                         onPressed: () {
                                           setState(() {
                                             heath_condition = 'highblood';
+                                            allergy = 'fatty';
                                             print('test');
-                                            _surveyIndex = 1;
+                                            _surveyIndex = 6;
                                           });
                                         },
                                       ),
@@ -395,9 +400,10 @@ class _SignupState extends State<Signup> {
                                         child: Text('Diabetic'),
                                         onPressed: () {
                                           print("test");
+                                          allergy='sugar';
                                           setState(() {
                                             print('test');
-                                            _surveyIndex = 1;
+                                            _surveyIndex = 6;
                                           });
                                         },
                                       ),
@@ -459,7 +465,7 @@ class _SignupState extends State<Signup> {
                                             onPressed: () {
                                               setState(() {
                                                 allergy = 'seafood';
-                                                _surveyIndex = 1;
+                                                _surveyIndex = 6;
                                               });
                                             },
                                           ),
@@ -724,7 +730,9 @@ class _SignupState extends State<Signup> {
                                           ],
                                         ),
                                       )
-                                    : Container()
+                                    : Container(
+                                      child:Text("")
+                                    )
           ],
         ),
       ),

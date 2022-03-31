@@ -1,5 +1,6 @@
 
 import 'package:anongulam/config/global.dart';
+import 'package:anongulam/pages/home/views.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
@@ -78,12 +79,12 @@ class _LoginState extends State<Login> {
           _load=false;
         });
         Navigator.pop(context);
-       Get.toNamed('/home');
-      // Navigator.push(
-      //         context,
-      //         MaterialPageRoute(builder: (context) {
-      //           return Home();
-      //         }));
+      //  Get.toNamed('/home');
+      Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) {
+                return Home();
+              }));
         //  runApp(Home());
       }
       else{
