@@ -63,7 +63,7 @@ void addLike() async {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Details"),
+          title: Text("${args[2]}"),
           backgroundColor: Color(0xffc6782b),
         ),
         body: Container(
@@ -81,6 +81,7 @@ void addLike() async {
                   },),top:10,right: 10,
                   )
               ],),
+              Padding(padding: EdgeInsets.only(bottom:10)),
               Container(
                 height: 300,
                 child: new ListView.separated(

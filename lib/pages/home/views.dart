@@ -22,6 +22,7 @@ class _HomeState extends State<Home> {
   'https://anongulam.s3.amazonaws.com/pic10.jpeg',
   'https://anongulam.s3.amazonaws.com/pic11.png',
 ];
+String _email ='';
   bool _load =false;
     List data_breakfast = [];
     List data_lunch = [];
@@ -38,6 +39,7 @@ class _HomeState extends State<Home> {
     print(now.hour);
     _load = true;
     final prefs = await SharedPreferences.getInstance();
+      _email = prefs.getString("_email").toString();
     var category = prefs.getString("category");
     var _allergy = prefs.getString("_allergy");
     setState(() {
@@ -109,7 +111,7 @@ class _HomeState extends State<Home> {
           padding: EdgeInsets.zero,
           children: <Widget>[
             DrawerHeader(
-              child: Text(''),
+              child: Text('${_email}',style:TextStyle(color: Colors.white)),
               decoration: BoxDecoration(
                 color:  Color(0xffc6782b),
               ),
@@ -200,9 +202,10 @@ class _HomeState extends State<Home> {
                 )
                 ,
                 onTap:() => {
-                    Get.toNamed('/details',arguments:['${feature[2]}','${feature[0]}'])
+                    Get.toNamed('/details',arguments:['${feature[2]}','${feature[0]}','${feature[1]}'])
                 }
-                )
+                ),
+                 feature.length!=0 ? Column(children:[Text(feature[1],style: TextStyle(fontSize: 20.0,fontWeight:FontWeight.bold))],crossAxisAlignment:CrossAxisAlignment.center) : Text('')
               
               ],
             ),
@@ -256,7 +259,7 @@ class _HomeState extends State<Home> {
                           ),
                         )),
                         onTap: (){
-                          Get.toNamed('/details',arguments:['${data_recommend[index][2]}','${data_recommend[index][0]}']);
+                          Get.toNamed('/details',arguments:['${data_recommend[index][2]}','${data_recommend[index][0]}','${data_recommend[index][1]}']);
                         },
                     ),
                     Column(
@@ -328,7 +331,7 @@ class _HomeState extends State<Home> {
                           ),
                         )),
                         onTap: (){
-                          Get.toNamed('/details',arguments:['${data_breakfast[index][2]}','${data_breakfast[index][0]}']);
+                          Get.toNamed('/details',arguments:['${data_breakfast[index][2]}','${data_breakfast[index][0]}','${data_recommend[index][1]}']);
                         },
                     ),
                     Column(
@@ -428,7 +431,7 @@ class _HomeState extends State<Home> {
                           ),
                         )),
                         onTap: (){
-                           Get.toNamed('/details',arguments:['${data_breakfast[index][2]}','${data_breakfast[index][0]}']);
+                           Get.toNamed('/details',arguments:['${data_breakfast[index][2]}','${data_breakfast[index][0]}','${data_recommend[index][1]}']);
                         },
                     ),
                     Column(
@@ -487,7 +490,7 @@ class _HomeState extends State<Home> {
                           ),
                         )),
                         onTap: (){
-                          Get.toNamed('/details',arguments:['${data_lunch[index][2]}','${data_lunch[index][0]}']);
+                          Get.toNamed('/details',arguments:['${data_lunch[index][2]}','${data_lunch[index][0]}','${data_recommend[index][1]}']);
                         },
                     ),
                     Column(
@@ -546,7 +549,7 @@ class _HomeState extends State<Home> {
                           ),
                         )),
                         onTap: (){
-                         Get.toNamed('/details',arguments:['${data_dinner[index][2]}','${data_dinner[index][0]}']);
+                         Get.toNamed('/details',arguments:['${data_dinner[index][2]}','${data_dinner[index][0]}','${data_recommend[index][1]}']);
                         },
                     ),
                     Column(

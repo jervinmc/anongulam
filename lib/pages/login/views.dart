@@ -20,7 +20,7 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   static String BASE_URL = ''+Global.url+'/login';
   bool _load = false;
-  
+  bool isReveal = true;
   void pageValidation()async {
       final prefs = await SharedPreferences.getInstance();
      print(prefs.getBool("isLoggedIn"));
@@ -72,6 +72,10 @@ class _LoginState extends State<Login> {
         }
         else if(_data['ispescatarian']=='yes'){
           prefs.setString('category', 'pescatarian');
+        }
+         else{
+           print("yesss");
+          prefs.setString('category', 'any');
         }
         var res=  jsonDecode(jsonsDataString);
         print(res['status']);
@@ -142,9 +146,24 @@ class _LoginState extends State<Login> {
                           height: 100,
                           padding: EdgeInsets.only(top: 10),
                           child: TextField(
-                                    obscureText: true,
+                                    obscureText: isReveal,
                                     controller: _password,
                                     decoration: InputDecoration(
+                                      suffixIcon:!isReveal ? InkWell(
+                                                      child: Icon(Icons.remove_red_eye),
+                                                      onTap:()=>{
+                                                       setState(() {
+                                                        isReveal = true;
+                                                      })
+                                                      }
+                                                    ) : InkWell(
+                                                      child:Icon(Icons.remove_red_eye_sharp),
+                                                      onTap: ()=>{
+                                                       setState(() {
+                                                        isReveal = false;
+                                                      })
+                                                      },
+                                                    ),
                                             contentPadding: EdgeInsets.all(8.0),enabledBorder: OutlineInputBorder(
                                             borderSide: BorderSide(color: Colors.grey, width: 1.5),
                                             borderRadius: BorderRadius.circular(20.0),

@@ -158,7 +158,7 @@ uploadImage(id) async {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Menu'),
+        title: Text('Add Meal'),
         backgroundColor: Color(0xffc6782b),
       ),
       body: ListView(children: [
@@ -281,7 +281,7 @@ uploadImage(id) async {
                   });
                     //  uploadImage();
                   },
-                  child: Text('Add New Recipe'),
+                  child: Text('Add Instructions'),
                   style: ElevatedButton.styleFrom(
                     primary: Color(0xffc6782b),
                     shape: RoundedRectangleBorder(
@@ -339,7 +339,7 @@ uploadImage(id) async {
                   });
                     //  uploadImage();
                   },
-                  child: Text('Add New Ingredients'),
+                  child: Text('Add Ingredients'),
                   style: ElevatedButton.styleFrom(
                     primary: Color(0xffc6782b),
                     shape: RoundedRectangleBorder(

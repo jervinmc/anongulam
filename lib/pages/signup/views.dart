@@ -25,6 +25,7 @@ class _SignupState extends State<Signup> {
   String ispaleo = 'no';
   String ispescatarian = 'no';
   String heath_condition = '';
+  bool isReveal =true;
   String allergy = 'None';
 
   void notify(DialogType type, title, desc) {
@@ -46,8 +47,14 @@ class _SignupState extends State<Signup> {
   TextEditingController _password = new TextEditingController();
   static String BASE_URL = '' + Global.url + '/register';
   TextEditingController _email = new TextEditingController();
+    TextEditingController _confirm_password = new TextEditingController();
   bool _load = false;
   void SignUp() async {
+    if(_password.text!=_confirm_password.text){
+       notify(DialogType.ERROR, 'Password does not match.',
+          '');
+          return;
+    }
     if (_email.text == null ||
         _password.text == null ||
         _email.text == '' ||
@@ -86,7 +93,10 @@ class _SignupState extends State<Signup> {
       });
     }
   }
-
+  void initState(){
+    super.initState();
+    _surveyIndex = 0;
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -634,13 +644,29 @@ class _SignupState extends State<Signup> {
                                                           Colors.white70),
                                                 )),
                                             Container(
-                                                height: 100,
+                                                height: 70,
                                                 padding:
                                                     EdgeInsets.only(top: 10),
                                                 child: TextField(
-                                                  obscureText: true,
+                                                  
+                                                  obscureText: isReveal,
                                                   controller: _password,
                                                   decoration: InputDecoration(
+                                                    suffixIcon:!isReveal ? InkWell(
+                                                      child: Icon(Icons.remove_red_eye),
+                                                      onTap:()=>{
+                                                       setState(() {
+                                                        isReveal = true;
+                                                      })
+                                                      }
+                                                    ) : InkWell(
+                                                      child:Icon(Icons.remove_red_eye_sharp),
+                                                      onTap: ()=>{
+                                                       setState(() {
+                                                        isReveal = false;
+                                                      })
+                                                      },
+                                                    ),
                                                       contentPadding:
                                                           EdgeInsets.all(8.0),
                                                       enabledBorder:
@@ -663,6 +689,38 @@ class _SignupState extends State<Signup> {
                                                           color:
                                                               Colors.grey[800]),
                                                       hintText: "Password",
+                                                      fillColor:
+                                                          Colors.white70),
+                                                )),
+                                                Container(
+                                                height: 100,
+                                                
+                                                child: TextField(
+                                                  obscureText: isReveal,
+                                                  controller: _confirm_password,
+                                                  decoration: InputDecoration(
+                                                      contentPadding:
+                                                          EdgeInsets.all(8.0),
+                                                      enabledBorder:
+                                                          OutlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                            color: Colors.grey,
+                                                            width: 1.5),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(20.0),
+                                                      ),
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(20.0),
+                                                      ),
+                                                      filled: true,
+                                                      hintStyle: TextStyle(
+                                                          color:
+                                                              Colors.grey[800]),
+                                                      hintText: "Confirm Password",
                                                       fillColor:
                                                           Colors.white70),
                                                 )),
@@ -701,7 +759,9 @@ class _SignupState extends State<Signup> {
                                                       color: Colors.black),
                                                 ),
                                                 onPressed: () {
-                                                  // Get.toNamed('/register');
+                                                  Navigator.pop(context);
+                                                  _surveyIndex = 0;
+                                                  Get.toNamed('/login');
                                                 },
                                                 style: ElevatedButton.styleFrom(
                                                     shape:
