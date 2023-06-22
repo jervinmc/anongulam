@@ -28,6 +28,7 @@ String _email ='';
     List data_lunch = [];
    String category_data = "";
     List data_dinner = [];
+    String fullname = '';
     List data_recommend = [];
    static String BASE_URL = '' + Global.url + '/menu_list';
    static String BASE_URL1 = '' + Global.url + '/recommend';
@@ -42,6 +43,7 @@ String _email ='';
       _email = prefs.getString("_email").toString();
     var category = prefs.getString("category");
     var _allergy = prefs.getString("_allergy");
+    fullname = prefs.getString("_fullname")!;
     setState(() {
       
     });
@@ -111,7 +113,12 @@ String _email ='';
           padding: EdgeInsets.zero,
           children: <Widget>[
             DrawerHeader(
-              child: Text('${_email}',style:TextStyle(color: Colors.white)),
+              child: Column(
+                children:[
+                  Text('${_email}',style:TextStyle(color: Colors.white)),
+                  Text('${fullname}',style:TextStyle(color: Colors.white))
+                ]
+              ),
               decoration: BoxDecoration(
                 color:  Color(0xffc6782b),
               ),
@@ -120,6 +127,16 @@ String _email ='';
               title: Text('Profile'),
               onTap: () {
                 Get.toNamed('/profile');
+                // Update the state of the app
+                // ...
+                // Then close the drawer
+                // Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text('Your Meals'),
+              onTap: () {
+                Get.toNamed('/user_meals');
                 // Update the state of the app
                 // ...
                 // Then close the drawer
@@ -180,21 +197,6 @@ String _email ='';
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-              
-                // Container(
-                //     child: Text('8:00AM'),
-                //     padding: EdgeInsets.only(top: 12, bottom: 10)),
-                // Container(
-                //     child: CarouselSlider(
-                //   options: CarouselOptions(),
-                //   items: imgList
-                //       .map((item) => Container(
-                //             child: Center(
-                //                 child: Image.network(item,
-                //                     fit: BoxFit.cover, width: 1000)),
-                //           ))
-                //       .toList(),
-                // )),
                 feature.length==0 ? Text('Loading...') :
                 InkWell(
                   child:Container(
@@ -259,7 +261,7 @@ String _email ='';
                           ),
                         )),
                         onTap: (){
-                          Get.toNamed('/details',arguments:['${data_recommend[index][2]}','${data_recommend[index][0]}','${data_recommend[index][1]}']);
+                          Get.toNamed('/details',arguments:['${data_recommend[index][2]}','${data_recommend[index][0]}','${data_recommend[index][1]}','${data_recommend[index][6]}']);
                         },
                     ),
                     Column(
@@ -282,78 +284,78 @@ String _email ='';
                 );
             })
           ),
-          Container(
-            padding: EdgeInsets.all(10),
-            child: Text(
-              "Alternative Breakfasts",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
-            ),
-          ),
-          _load
-                ? Container(
-                    color: Colors.white10,
-                    width: 70.0,
-                    height: 70.0,
-                    child: new Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: new Center(
-                            child: const CircularProgressIndicator())),
-                  )
-                : Text(''),
-          Container(
-            height: 200,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: data_breakfast.length,
-              itemBuilder: (BuildContext context, index){
-                return Column(
-                  children: [
-                    InkWell(
-                      child: Card(
-                        elevation: 4,
-                        // color: Color(0xffc6782b),
-                        shape: RoundedRectangleBorder(
-                          side: BorderSide(color: Colors.white70, width: 1),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        margin: EdgeInsets.all(20.0),
-                        child: Container(
-                          // width: 150,
-                          // height: 185,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Image.network(data_breakfast[index][2].toString(),fit: BoxFit.cover,height:100,width: 100,),
+          // Container(
+          //   padding: EdgeInsets.all(10),
+          //   child: Text(
+          //     "Alternative Breakfasts",
+          //     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+          //   ),
+          // ),
+          // _load
+          //       ? Container(
+          //           color: Colors.white10,
+          //           width: 70.0,
+          //           height: 70.0,
+          //           child: new Padding(
+          //               padding: const EdgeInsets.all(5.0),
+          //               child: new Center(
+          //                   child: const CircularProgressIndicator())),
+          //         )
+          //       : Text(''),
+          // Container(
+          //   height: 200,
+          //   child: ListView.builder(
+          //     scrollDirection: Axis.horizontal,
+          //     itemCount: data_breakfast.length,
+          //     itemBuilder: (BuildContext context, index){
+          //       return Column(
+          //         children: [
+          //           InkWell(
+          //             child: Card(
+          //               elevation: 4,
+          //               // color: Color(0xffc6782b),
+          //               shape: RoundedRectangleBorder(
+          //                 side: BorderSide(color: Colors.white70, width: 1),
+          //                 borderRadius: BorderRadius.circular(10),
+          //               ),
+          //               margin: EdgeInsets.all(20.0),
+          //               child: Container(
+          //                 // width: 150,
+          //                 // height: 185,
+          //                 child: Column(
+          //                   mainAxisAlignment: MainAxisAlignment.end,
+          //                   crossAxisAlignment: CrossAxisAlignment.center,
+          //                   children: [
+          //                     Image.network(data_breakfast[index][2].toString(),fit: BoxFit.cover,height:100,width: 100,),
                               
-                              Padding(padding: EdgeInsets.only(bottom: 15))
-                            ],
-                          ),
-                        )),
-                        onTap: (){
-                          Get.toNamed('/details',arguments:['${data_breakfast[index][2]}','${data_breakfast[index][0]}','${data_recommend[index][1]}']);
-                        },
-                    ),
-                    Column(
-                      children: [
-                        Text(data_breakfast[index][1],
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15.0)),
-                              Text("10 Min",
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                  )),
-                      ],
-                    ),
+          //                     Padding(padding: EdgeInsets.only(bottom: 15))
+          //                   ],
+          //                 ),
+          //               )),
+          //               onTap: (){
+          //                 Get.toNamed('/details',arguments:['${data_breakfast[index][2]}','${data_breakfast[index][0]}','${data_recommend[index][1]}']);
+          //               },
+          //           ),
+          //           Column(
+          //             children: [
+          //               Text(data_breakfast[index][1],
+          //                         style: TextStyle(
+          //                             color: Colors.black,
+          //                             fontWeight: FontWeight.bold,
+          //                             fontSize: 15.0)),
+          //                     Text(" ",
+          //                         style: TextStyle(
+          //                           color: Colors.black,
+          //                           fontWeight: FontWeight.bold,
+          //                         )),
+          //             ],
+          //           ),
                         
                     
-                  ],
-                );
-            })
-          ),
+          //         ],
+          //       );
+          //   })
+          // ),
               Container(
                 padding: EdgeInsets.all(10),
                 child:  Text("Weekly Meals",
@@ -396,7 +398,7 @@ String _email ='';
                 Container(
             padding: EdgeInsets.all(10),
             child: Text(
-              "${category_data=='keto' ? 'keto' : category_data=='paleo' ? 'Paleo' : category_data=='pescatarian' ? 'Pescatarian' : 'Vegetarian'} Breakfasts",
+              "${category_data=='keto' ? 'keto' : category_data=='paleo' ? 'Paleo' : category_data=='pescatarian' ? 'Pescatarian' : category_data=='no pork' ? 'No Pork' : 'Vegetarian'} Breakfasts",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
             ),
           ),
@@ -431,7 +433,7 @@ String _email ='';
                           ),
                         )),
                         onTap: (){
-                           Get.toNamed('/details',arguments:['${data_breakfast[index][2]}','${data_breakfast[index][0]}','${data_recommend[index][1]}']);
+                           Get.toNamed('/details',arguments:['${data_breakfast[index][2]}','${data_breakfast[index][0]}','${data_breakfast[index][1]}','${data_breakfast[index][7]}']);
                         },
                     ),
                     Column(
@@ -441,7 +443,7 @@ String _email ='';
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 15.0)),
-                              Text("10 Min",
+                              Text(" ",
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold,
@@ -455,7 +457,7 @@ String _email ='';
           Container(
             padding: EdgeInsets.all(10),
             child: Text(
-             "${category_data=='keto' ? 'keto' : category_data=='paleo' ? 'Paleo' : category_data=='pescatarian' ? 'Pescatarian' : 'Vegetarian'} Lunch",
+             "${category_data=='keto' ? 'keto' : category_data=='paleo' ? 'Paleo' : category_data=='pescatarian' ? 'Pescatarian' : category_data=='no pork' ? 'No Pork' : 'Vegetarian'} Lunch",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
             ),
           ),
@@ -490,7 +492,7 @@ String _email ='';
                           ),
                         )),
                         onTap: (){
-                          Get.toNamed('/details',arguments:['${data_lunch[index][2]}','${data_lunch[index][0]}','${data_recommend[index][1]}']);
+                          Get.toNamed('/details',arguments:['${data_lunch[index][2]}','${data_lunch[index][0]}','${data_lunch[index][1]}','${data_lunch[index][6]}']);
                         },
                     ),
                     Column(
@@ -500,7 +502,7 @@ String _email ='';
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 15.0)),
-                              Text("10 Min",
+                              Text(" ",
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold,
@@ -514,7 +516,7 @@ String _email ='';
           Container(
             padding: EdgeInsets.all(10),
             child: Text(
-              "${category_data=='keto' ? 'keto' : category_data=='paleo' ? 'Paleo' : category_data=='pescatarian' ? 'Pescatarian' : 'Vegetarian'} Dinner",
+              "${category_data=='keto' ? 'keto' : category_data=='paleo' ? 'Paleo' : category_data=='pescatarian' ? 'Pescatarian' : category_data=='no pork' ? 'No Pork' : 'Vegetarian'} Dinner",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
             ),
           ),
@@ -549,7 +551,7 @@ String _email ='';
                           ),
                         )),
                         onTap: (){
-                         Get.toNamed('/details',arguments:['${data_dinner[index][2]}','${data_dinner[index][0]}','${data_recommend[index][1]}']);
+                         Get.toNamed('/details',arguments:['${data_dinner[index][2]}','${data_dinner[index][0]}','${data_dinner[index][1]}','${data_dinner[index][6]}']);
                         },
                     ),
                     Column(
@@ -559,7 +561,7 @@ String _email ='';
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 15.0)),
-                              Text("10 Min",
+                              Text(" ",
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold,

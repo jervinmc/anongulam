@@ -24,7 +24,8 @@ class _AddPantryState extends State<AddPantry> {
   TextEditingController quantity = new TextEditingController();
 
 bool hasImage = false;
-
+ final items_1 = ['ml','piece','grams','tbsp','tsp','cup'];
+    String category_select = 'piece';
 
  loadMyModel()async{
     var resultant = await Tflite.loadModel(model: 
@@ -44,7 +45,7 @@ bool hasImage = false;
     final prefs = await SharedPreferences.getInstance();
     var _id = prefs.getInt("_id");
     var params = {
-      "name": name.text,
+      "name": "${name.text} (${category_select})",
       "quantity": quantity.text,
       "user_id": _id,
     };
@@ -113,6 +114,18 @@ bool hasImage = false;
                 ),
               ),
             ),
+              Padding(padding: EdgeInsets.only(top: 20)),
+                   Container(
+
+                 width: 3000,
+                decoration:BoxDecoration(borderRadius:BorderRadius.circular(5),border:Border.all(color: Colors.black,width:1)),
+              padding: EdgeInsets.only(top: 0),
+              child:DropdownButton<String>(items: items_1.map(buildMenuItem).toList(),
+              value:category_select,
+              onChanged:(category_select)=>setState(() {
+                  this.category_select = category_select!;
+              }))
+            ),
             Container(
               padding: EdgeInsets.only(top: 10),
               child: TextField(
@@ -146,37 +159,42 @@ bool hasImage = false;
                     ),
                   ),
                 )),
-                Padding(padding: EdgeInsets.only(top: 5)),
-                 new SizedBox(
-                width: 350.0,
-                height: 50.0,
-                child: ElevatedButton(
-                  onPressed: () {
-                    runFilePiker();
-                    //  uploadImage();
-                  },
-                  child: Text('Capture Image'),
-                  style: ElevatedButton.styleFrom(
-                    primary: Color(0xffc6782b),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12), // <-- Radius
-                    ),
-                  ),
-                )),
-            _load
-                ? Container(
-                    color: Colors.white10,
-                    width: 70.0,
-                    height: 70.0,
-                    child: new Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: new Center(
-                            child: const CircularProgressIndicator())),
-                  )
-                : Text(''),
+                // Padding(padding: EdgeInsets.only(top: 5)),
+                //  new SizedBox(
+                // width: 350.0,
+                // height: 50.0,
+                // child: ElevatedButton(
+                //   onPressed: () {
+                //     runFilePiker();
+                //     //  uploadImage();
+                //   },
+                //   child: Text('Capture Image'),
+                //   style: ElevatedButton.styleFrom(
+                //     primary: Color(0xffc6782b),
+                //     shape: RoundedRectangleBorder(
+                //       borderRadius: BorderRadius.circular(12), // <-- Radius
+                //     ),
+                //   ),
+                // )),
+            // _load
+            //     ? Container(
+            //         color: Colors.white10,
+            //         width: 70.0,
+            //         height: 70.0,
+            //         child: new Padding(
+            //             padding: const EdgeInsets.all(5.0),
+            //             child: new Center(
+            //                 child: const CircularProgressIndicator())),
+            //       )
+            //     : Text(''),
           ],
         ),
       ),
     );
   }
+    
+  DropdownMenuItem<String> buildMenuItem(String item) => DropdownMenuItem(
+    value:item,
+    child: Container(padding:EdgeInsets.all(10),child:Text(item,style:TextStyle(fontSize: 15)))
+  );
 }

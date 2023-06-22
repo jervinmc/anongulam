@@ -24,9 +24,17 @@ class _SignupState extends State<Signup> {
   String isvegetarian = 'no';
   String ispaleo = 'no';
   String ispescatarian = 'no';
+  String isnopork = 'no';
   String heath_condition = '';
-  bool isReveal =true;
-  String allergy = 'None';
+  bool isSeafood = false;
+  bool isMeat = false;
+  bool isDairy = false;
+  bool isNuts = false;
+  bool isSoyFood = false;
+  bool isWheat = false;
+
+  bool isReveal = true;
+  List allergy = ['none'];
 
   void notify(DialogType type, title, desc) {
     AwesomeDialog(
@@ -47,13 +55,13 @@ class _SignupState extends State<Signup> {
   TextEditingController _password = new TextEditingController();
   static String BASE_URL = '' + Global.url + '/register';
   TextEditingController _email = new TextEditingController();
-    TextEditingController _confirm_password = new TextEditingController();
+  TextEditingController _confirm_password = new TextEditingController();
+  TextEditingController _fullname = new TextEditingController();
   bool _load = false;
   void SignUp() async {
-    if(_password.text!=_confirm_password.text){
-       notify(DialogType.ERROR, 'Password does not match.',
-          '');
-          return;
+    if (_password.text != _confirm_password.text) {
+      notify(DialogType.ERROR, 'Password does not match.', '');
+      return;
     }
     if (_email.text == null ||
         _password.text == null ||
@@ -67,9 +75,12 @@ class _SignupState extends State<Signup> {
       "isketo": isketo,
       "isvegetarian": isvegetarian,
       "ispaleo": ispaleo,
+      "health_condition":heath_condition,
       "isany": isany,
+      "isnopork": isnopork,
       "ispescatarian": ispescatarian,
       "allergy": allergy,
+      "fullname": _fullname.text
     };
     setState(() {
       _load = true;
@@ -93,10 +104,12 @@ class _SignupState extends State<Signup> {
       });
     }
   }
-  void initState(){
+
+  void initState() {
     super.initState();
     _surveyIndex = 0;
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -244,6 +257,31 @@ class _SignupState extends State<Signup> {
                                 },
                               ),
                             ),
+                            
+                            Container(
+                              padding: EdgeInsets.only(top: 15),
+                              width: 250,
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                            isnopork == 'no'
+                                                ? Color(0xffc6782b)
+                                                : Colors.black),
+                                    shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                    ))),
+                                child: Text('No pork'),
+                                onPressed: () {
+                                  setState(() {
+                                    isnopork = 'yes';
+                                    _surveyIndex = 3;
+                                  });
+                                },
+                              ),
+                            ),
                             Container(
                               padding: EdgeInsets.only(top: 15),
                               width: 250,
@@ -386,7 +424,7 @@ class _SignupState extends State<Signup> {
                                         onPressed: () {
                                           setState(() {
                                             heath_condition = 'highblood';
-                                            allergy = 'fatty';
+                                            allergy.add('fatty');
                                             print('test');
                                             _surveyIndex = 6;
                                           });
@@ -410,7 +448,8 @@ class _SignupState extends State<Signup> {
                                         child: Text('Diabetic'),
                                         onPressed: () {
                                           print("test");
-                                          allergy='sugar';
+                                          heath_condition ='sugar';
+                                          allergy.add('sugar');
                                           setState(() {
                                             print('test');
                                             _surveyIndex = 6;
@@ -436,7 +475,8 @@ class _SignupState extends State<Signup> {
                                         onPressed: () {
                                           print("test");
                                           setState(() {
-                                            print('test');
+                                            heath_condition='allergy';
+                                            print('teste');
                                             _surveyIndex = 5;
                                           });
                                         },
@@ -460,9 +500,11 @@ class _SignupState extends State<Signup> {
                                           child: ElevatedButton(
                                             style: ButtonStyle(
                                                 backgroundColor:
-                                                    MaterialStateProperty.all<
-                                                            Color>(
-                                                        Color(0xffc6782b)),
+                                                    MaterialStateProperty
+                                                        .all<Color>(isSeafood
+                                                            ? Colors.black
+                                                            : Color(
+                                                                0xffc6782b)),
                                                 shape: MaterialStateProperty.all<
                                                         RoundedRectangleBorder>(
                                                     RoundedRectangleBorder(
@@ -474,8 +516,9 @@ class _SignupState extends State<Signup> {
                                                 'Sea foods (prawns, fish, oysters, etc.)'),
                                             onPressed: () {
                                               setState(() {
-                                                allergy = 'seafood';
-                                                _surveyIndex = 6;
+                                                isSeafood = !isSeafood;
+                                                allergy.add('seafood');
+                                                // _surveyIndex = 6;
                                               });
                                             },
                                           ),
@@ -491,15 +534,18 @@ class _SignupState extends State<Signup> {
                                             ),
                                             onPressed: () {
                                               setState(() {
-                                                allergy = 'dairy';
-                                                _surveyIndex = 6;
+                                                isDairy = !isDairy;
+                                                allergy.add('dairy');
+                                                // _surveyIndex = 6;
                                               });
                                             },
                                             style: ButtonStyle(
                                                 backgroundColor:
-                                                    MaterialStateProperty.all<
-                                                            Color>(
-                                                        Color(0xffc6782b)),
+                                                    MaterialStateProperty
+                                                        .all<Color>(isDairy
+                                                            ? Colors.black
+                                                            : Color(
+                                                                0xffc6782b)),
                                                 shape: MaterialStateProperty.all<
                                                         RoundedRectangleBorder>(
                                                     RoundedRectangleBorder(
@@ -520,15 +566,17 @@ class _SignupState extends State<Signup> {
                                             ),
                                             onPressed: () {
                                               setState(() {
-                                                allergy = 'nuts';
-                                                _surveyIndex = 6;
+                                                isNuts = !isNuts;
+                                                allergy.add('nuts');
                                               });
                                             },
                                             style: ButtonStyle(
                                                 backgroundColor:
-                                                    MaterialStateProperty.all<
-                                                            Color>(
-                                                        Color(0xffc6782b)),
+                                                    MaterialStateProperty
+                                                        .all<Color>(isNuts
+                                                            ? Colors.black
+                                                            : Color(
+                                                                0xffc6782b)),
                                                 shape: MaterialStateProperty.all<
                                                         RoundedRectangleBorder>(
                                                     RoundedRectangleBorder(
@@ -549,15 +597,17 @@ class _SignupState extends State<Signup> {
                                             ),
                                             onPressed: () {
                                               setState(() {
-                                                 allergy = 'soy foods';
-                                                _surveyIndex = 6;
+                                                isSoyFood = !isSoyFood;
+                                                allergy.add('soy foods');
                                               });
                                             },
                                             style: ButtonStyle(
                                                 backgroundColor:
-                                                    MaterialStateProperty.all<
-                                                            Color>(
-                                                        Color(0xffc6782b)),
+                                                    MaterialStateProperty
+                                                        .all<Color>(isSoyFood
+                                                            ? Colors.black
+                                                            : Color(
+                                                                0xffc6782b)),
                                                 shape: MaterialStateProperty.all<
                                                         RoundedRectangleBorder>(
                                                     RoundedRectangleBorder(
@@ -578,7 +628,68 @@ class _SignupState extends State<Signup> {
                                             ),
                                             onPressed: () {
                                               setState(() {
-                                                 allergy = 'wheat';
+                                                isWheat = !isWheat;
+                                                allergy.add('wheat');
+                                              });
+                                            },
+                                            style: ButtonStyle(
+                                                backgroundColor:
+                                                    MaterialStateProperty
+                                                        .all<Color>(isWheat
+                                                            ? Colors.black
+                                                            : Color(
+                                                                0xffc6782b)),
+                                                shape: MaterialStateProperty.all<
+                                                        RoundedRectangleBorder>(
+                                                    RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          18.0),
+                                                ))),
+                                          ),
+                                        ),
+                                        // Container(
+                                        //   padding: EdgeInsets.only(top: 5),
+                                        //   width: 250,
+                                        //   child: ElevatedButton(
+                                        //     child: Text(
+                                        //       "Pork",
+                                        //       style: TextStyle(
+                                        //           color: Colors.white),
+                                        //     ),
+                                        //     onPressed: () {
+                                        //       setState(() {
+                                        //         isMeat = !isMeat;
+                                        //         allergy.add('pork');
+                                        //       });
+                                        //     },
+                                        //     style: ButtonStyle(
+                                        //         backgroundColor:
+                                        //             MaterialStateProperty
+                                        //                 .all<Color>(isMeat
+                                        //                     ? Colors.black
+                                        //                     : Color(
+                                        //                         0xffc6782b)),
+                                        //         shape: MaterialStateProperty.all<
+                                        //                 RoundedRectangleBorder>(
+                                        //             RoundedRectangleBorder(
+                                        //           borderRadius:
+                                        //               BorderRadius.circular(
+                                        //                   18.0),
+                                        //         ))),
+                                        //   ),
+                                        // ),
+                                        Container(
+                                          padding: EdgeInsets.only(top: 5),
+                                          width: 250,
+                                          child: ElevatedButton(
+                                            child: Text(
+                                              "Proceed",
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                            onPressed: () {
+                                              setState(() {
                                                 _surveyIndex = 6;
                                               });
                                             },
@@ -644,29 +755,69 @@ class _SignupState extends State<Signup> {
                                                           Colors.white70),
                                                 )),
                                             Container(
+                                                padding:
+                                                    EdgeInsets.only(top: 10),
+                                                child: TextField(
+                                                  controller: _fullname,
+                                                  decoration: InputDecoration(
+                                                      contentPadding:
+                                                          EdgeInsets.all(8.0),
+                                                      enabledBorder:
+                                                          OutlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                            color: Colors.grey,
+                                                            width: 1.5),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(20.0),
+                                                      ),
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                            color:
+                                                                Colors.purple,
+                                                            width: 5.0),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(20.0),
+                                                      ),
+                                                      filled: true,
+                                                      hintStyle: TextStyle(
+                                                          color:
+                                                              Colors.grey[800]),
+                                                      hintText: "Full Name",
+                                                      fillColor:
+                                                          Colors.white70),
+                                                )),
+                                            Container(
                                                 height: 70,
                                                 padding:
                                                     EdgeInsets.only(top: 10),
                                                 child: TextField(
-                                                  
                                                   obscureText: isReveal,
                                                   controller: _password,
                                                   decoration: InputDecoration(
-                                                    suffixIcon:!isReveal ? InkWell(
-                                                      child: Icon(Icons.remove_red_eye),
-                                                      onTap:()=>{
-                                                       setState(() {
-                                                        isReveal = true;
-                                                      })
-                                                      }
-                                                    ) : InkWell(
-                                                      child:Icon(Icons.remove_red_eye_sharp),
-                                                      onTap: ()=>{
-                                                       setState(() {
-                                                        isReveal = false;
-                                                      })
-                                                      },
-                                                    ),
+                                                      suffixIcon: !isReveal
+                                                          ? InkWell(
+                                                              child: Icon(Icons
+                                                                  .remove_red_eye),
+                                                              onTap: () => {
+                                                                    setState(
+                                                                        () {
+                                                                      isReveal =
+                                                                          true;
+                                                                    })
+                                                                  })
+                                                          : InkWell(
+                                                              child: Icon(Icons
+                                                                  .remove_red_eye_sharp),
+                                                              onTap: () => {
+                                                                setState(() {
+                                                                  isReveal =
+                                                                      false;
+                                                                })
+                                                              },
+                                                            ),
                                                       contentPadding:
                                                           EdgeInsets.all(8.0),
                                                       enabledBorder:
@@ -692,9 +843,8 @@ class _SignupState extends State<Signup> {
                                                       fillColor:
                                                           Colors.white70),
                                                 )),
-                                                Container(
-                                                height: 100,
-                                                
+                                            Container(
+                                                height: 50,
                                                 child: TextField(
                                                   obscureText: isReveal,
                                                   controller: _confirm_password,
@@ -720,7 +870,8 @@ class _SignupState extends State<Signup> {
                                                       hintStyle: TextStyle(
                                                           color:
                                                               Colors.grey[800]),
-                                                      hintText: "Confirm Password",
+                                                      hintText:
+                                                          "Confirm Password",
                                                       fillColor:
                                                           Colors.white70),
                                                 )),
@@ -749,8 +900,22 @@ class _SignupState extends State<Signup> {
                                                 },
                                               ),
                                             ),
+                                            _load
+                                                ? Container(
+                                                    color: Colors.white10,
+                                                    width: 70.0,
+                                                    height: 70.0,
+                                                    child: new Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(5.0),
+                                                        child: new Center(
+                                                            child:
+                                                                const CircularProgressIndicator())),
+                                                  )
+                                                : Text(''),
                                             Container(
-                                              padding: EdgeInsets.only(top: 5),
+                                              padding: EdgeInsets.only(top: 0),
                                               width: 250,
                                               child: ElevatedButton(
                                                 child: Text(
@@ -790,9 +955,7 @@ class _SignupState extends State<Signup> {
                                           ],
                                         ),
                                       )
-                                    : Container(
-                                      child:Text("")
-                                    )
+                                    : Container(child: Text(""))
           ],
         ),
       ),

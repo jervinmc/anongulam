@@ -56,9 +56,14 @@ class _LoginState extends State<Login> {
       String jsonsDataString = response.body.toString();
       final _data = jsonDecode(jsonsDataString);
       if(_data['status']==201){
+        print(_data);
         prefs.setInt("_id",_data['id']);
         prefs.setString("_email",_data['email']);
         prefs.setString("_allergy",_data['allergy']);
+        prefs.setString("health_condition",_data['health_condition']);
+        print(_data['allergy']);
+        print(_data['health_condition']);
+        prefs.setString("_fullname",_data['fullname']);
         prefs.setBool("isLoggedIn", true);
         if(_data['isketo']=='yes'){
           print("nice");
@@ -72,6 +77,9 @@ class _LoginState extends State<Login> {
         }
         else if(_data['ispescatarian']=='yes'){
           prefs.setString('category', 'pescatarian');
+        }
+         else if(_data['isnopork']=='yes'){
+          prefs.setString('category', 'no pork');
         }
          else{
            print("yesss");

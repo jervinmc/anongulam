@@ -13,6 +13,15 @@ class Details extends StatefulWidget {
 }
 
 class _DetailsState extends State<Details> {
+  bool isLiked =false;
+ void initState() {
+   viewStatusLike();
+    // print('NDFAJEHWFIHJEDIFJAIJWEFOJAWEJFIJAODJFAWE');
+    getData();
+    
+    // TODO: implement initState
+    super.initState();
+  }
   final args;
   _DetailsState(this.args);
   bool _load = false;
@@ -20,6 +29,7 @@ class _DetailsState extends State<Details> {
   static String BASE_URL = '' + Global.url + '/recipe';
     static String BASE_URL1 = '' + Global.url + '/likes';
   Future<String> getData() async {
+    print('okay');
     setState(() {
       _load=true;
     });
@@ -52,18 +62,36 @@ void addLike() async {
         body: json.encode(params));
     final data = json.decode(response.body);
   }
-  @override
-  void initState() {
-    getData();
-    // TODO: implement initState
-    super.initState();
-  }
+  
+  void viewStatusLike() async {
+    setState(() {
+      _load = true;
+    });
+    final prefs = await SharedPreferences.getInstance();
+    var _id = prefs.getInt("_id");
+    var params = {
+      "menu_id": args[1],
+      "user_id": _id,
+    };
+    final response = await http.put(Uri.parse(BASE_URL1 + '/' + '1'),
+        headers: {"Content-Type": "application/json"},
+        body: json.encode(params));
+    final data = json.decode(response.body);
+    isLiked = data;
+  } 
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("${args[2]}"),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children:[
+              Text("${args[2]}"),
+              Text("Calories: ${args[3]}")
+            ]
+          ),
           backgroundColor: Color(0xffc6782b),
         ),
         body: Container(
@@ -75,7 +103,10 @@ void addLike() async {
                   height: 200,
                   width: 400,
                   child: Image.network(args[0], fit: BoxFit.cover)),
-                  Positioned(child: IconButton(icon: Icon(Icons.favorite,size: 30,color: Colors.red,),onPressed: (){
+                  Container(
+                    child:Text(args[3])
+                  ),
+                  Positioned(child: IconButton(icon: Icon(Icons.favorite,size: 30,color: isLiked ? Colors.red : Colors.grey,),onPressed: (){
                     addLike();
                      Get.toNamed('/home');
                   },),top:10,right: 10,

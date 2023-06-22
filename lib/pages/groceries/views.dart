@@ -20,6 +20,8 @@ class _GroceriesState extends State<Groceries> {
   List data = [];
   bool _load = false;
   List total = [];
+  List groceryList=[];
+  List totalAll = [];
   Future<String> getData() async {
     setState(() {
       _load = true;
@@ -33,8 +35,12 @@ class _GroceriesState extends State<Groceries> {
       try {
         _load = false;
         data = json.decode(response.body);
+        totalAll = data;
         for(int x=0;x<data.length;x++){
           total.add({"name":data[x][0],"quantity":data[x][1]});
+          // totalAll.add({"name":data[x][0],"quantity":data[x][1]});
+          groceryList.add(true);
+          print(data[x]);
         }
         _load = false;
       } finally {
@@ -51,7 +57,14 @@ class _GroceriesState extends State<Groceries> {
     });
     final prefs = await SharedPreferences.getInstance();
     var _id = prefs.getInt("_id");
-
+    total = [];
+    for(int x=0;x<totalAll.length;x++){
+      print(totalAll[x][0]);
+      if(groceryList[x]){
+        print(x);
+        total.add({"name":totalAll[x][0],"quantity":totalAll[x][1]});
+      }
+    }
     var params = {
       "user_id": _id,
       "listitem": total,
@@ -109,7 +122,22 @@ class _GroceriesState extends State<Groceries> {
                   onTap: () {
                     // Get.toNamed('/productdetails',arguments:[data[index]['product_name'],data[index]['quantity'],data[index]['price'],data[index]['id']]);
                   },
-                  title: Text(data[index][0]),
+                  title: Row(
+                    children:[
+                      Checkbox(
+                        value: groceryList[index],
+                        onChanged: (val){
+                          print(val);
+                          groceryList[index]=val;
+                          setState(() {
+                            
+                          });
+                        }
+                      ),
+                        
+                    Text(data[index][0]),
+                    ]
+                  ),
                   trailing: Text("${data[index][1]}"),
                 );
               },separatorBuilder: (context, index) {

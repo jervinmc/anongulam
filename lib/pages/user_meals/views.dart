@@ -9,16 +9,14 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 
 
-class Recommend extends StatefulWidget {
-  const Recommend({Key? key}) : super(key: key);
+class UserMeals extends StatefulWidget {
+  const UserMeals({Key? key}) : super(key: key);
   @override
-  _RecommendState createState() => _RecommendState();
+  _UserMealsState createState() => _UserMealsState();
 }
 
-class _RecommendState extends State<Recommend> {
-  
-
- static String BASE_URL = '' + Global.url + '/weekly';
+class _UserMealsState extends State<UserMeals> {
+ static String BASE_URL = '' + Global.url + '/user_meals';
   List data = [];
   bool _load = false;
   Future<String> getData() async {
@@ -34,6 +32,7 @@ class _RecommendState extends State<Recommend> {
       try {
         _load = false;
         data = json.decode(response.body);
+        print(data);
       } finally {
         _load = false;
         
@@ -76,7 +75,7 @@ class _RecommendState extends State<Recommend> {
                 return InkWell(
                   child: new ListTile(
                   onTap: (){
-                          Get.toNamed('/details',arguments:['${data[index][2]}','${data[index][0]}','${data[index][1]}','${data[index][7]}']);
+                          Get.toNamed('/menu_edit',arguments:['${data[index][2]}','${data[index][0]}','${data[index][1]}','${data[index][3]}','${data[index][4]}','${data[index][5]}']);
                         },
                   title: Column(
                     crossAxisAlignment:CrossAxisAlignment.start,
@@ -88,7 +87,7 @@ class _RecommendState extends State<Recommend> {
                 ),
                 );
               },separatorBuilder: (context, index) {
-                  return Text("${index>=0 && index<=2  ? 'Monday' : index>=3 && index<=5 ? 'Tuesday' :  index>=6 && index<=8 ? 'Wednesday' :  index>=9 && index<=11 ? 'Thursday' : index>=12 && index<=14 ? 'Friday' : index>=15 && index<=17 ? 'Saturday' : 'Sunday'  }",style:TextStyle(color:Colors.red));
+                  return Divider();
                 },
             ),
       ),
@@ -102,7 +101,6 @@ class _RecommendState extends State<Recommend> {
       // ),
     );
   } 
-
 }
 
 
